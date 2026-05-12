@@ -1,6 +1,6 @@
-# 📚 BIKINBUKUYUK - Ebook Creator & Library
+# 📚 BIKINBUGRATIS - Ebook Creator & Library
 
-**BIKINBUKUYUK** adalah aplikasi web berbasis cloud yang dirancang khusus untuk mempermudah penulis, akademisi, dan profesional di Indonesia dalam menyusun naskah buku menjadi format Ebook PDF yang profesional dan rapi secara instan.
+**BIKINBUKUGRATIS** adalah aplikasi web berbasis cloud yang dirancang khusus untuk mempermudah penulis, akademisi, dan profesional di Indonesia dalam menyusun naskah buku menjadi format Ebook PDF yang profesional dan rapi secara instan.
 
 ---
 
