@@ -1,0 +1,163 @@
+/* DASAR HALAMAN */
+body { 
+    background: #e9ecef; 
+    font-family: 'Georgia', serif; 
+    color: #333; 
+    margin: 0; 
+    padding: 0; 
+}
+
+/* NAVBAR ATAS (no-print agar tidak ikut ke PDF) */
+.top-nav {
+    position: fixed;
+    top: 0;
+    width: 100%;
+    background: #2c3e50;
+    padding: 15px 0;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    font-family: 'Segoe UI', sans-serif;
+    box-shadow: 0 2px 10px rgba(0,0,0,0.2);
+    z-index: 1000;
+    color: white;
+}
+
+.top-nav label { 
+    font-weight: bold; 
+    font-size: 0.9em; 
+}
+
+.top-nav select { 
+    padding: 8px; 
+    border-radius: 4px; 
+    border: none; 
+    width: 250px; 
+    background: #ecf0f1;
+    color: #2c3e50;
+}
+
+/* TOMBOL NAVBAR */
+.nav-btn {
+    padding: 8px 18px;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    font-size: 0.85em;
+    transition: 0.3s;
+    color: white;
+    background: #34495e;
+}
+
+.btn-editor { background: #2ecc71; }
+.btn-editor:hover { background: #27ae60; }
+
+.btn-pdf { background: #34495e; border: 1px solid #7f8c8d; }
+.btn-pdf:hover { background: #465c71; }
+
+.btn-word { background: #34495e; border: 1px solid #7f8c8d; }
+
+/* AREA BUKU (Kertas Putih) */
+.main-container {
+    padding-top: 40px; /* Jarak agar tidak tertutup navbar */
+    display: flex;
+    justify-content: center;
+}
+
+.book { 
+    max-width: 800px; 
+    margin: 100px auto 60px auto; 
+    background: #fff; 
+    padding: 80px 100px; 
+    box-shadow: 0 5px 20px rgba(0,0,0,0.08); 
+    line-height: 1.8; 
+    min-height: 600px;
+}
+
+/* STYLING KONTEN BUKU */
+h1.main-title { 
+    text-align: center; 
+    text-transform: uppercase; 
+    margin-top: 40px; 
+    margin-bottom: 10px; 
+    letter-spacing: 2px; 
+}
+
+p.subtitle { 
+    text-align: center; 
+    font-style: italic; 
+    color: #666; 
+    margin-bottom: 80px; 
+    max-width: 650px; 
+    margin-left: auto; 
+    margin-right: auto; 
+}
+
+h2.chapter-title { 
+    text-align: center; 
+    margin-top: 50px; 
+    border-bottom: 1px solid #eaeaea; 
+    padding-bottom: 15px; 
+    margin-bottom: 30px; 
+    color: #111; 
+}
+
+#placeholder-text {
+    margin: auto;
+    text-align: center;
+    color: #7f8c8d;
+    font-size: 1.2em;
+    font-weight: bold;
+}
+
+/* PEMISAH HALAMAN VISUAL (Garis Putus-putus di Web) */
+.page-break {
+    display: block;
+    margin: 80px 0;
+    border-bottom: 2px dashed #bdc3c7;
+    position: relative;
+    page-break-before: always;
+    break-before: page;
+}
+
+.page-break::after {
+    content: "PAGE BREAK (NEW PAGE)";
+    position: absolute;
+    bottom: -12px;
+    left: 50%;
+    transform: translateX(-50%);
+    background: #fff;
+    padding: 0 15px;
+    color: #95a5a6;
+    font-size: 0.8em;
+    font-family: sans-serif;
+    letter-spacing: 2px;
+    font-weight: bold;
+}
+
+.cover-image {
+    max-width: 100%;
+    height: auto;
+    margin-bottom: 30px;
+    border-radius: 5px;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+/* SETTING KHUSUS PRINT PDF */
+@media print { 
+    .no-print { display: none !important; } 
+    body { background: #fff; }
+    .book { margin: 0; box-shadow: none; width: 100%; max-width: 100%; padding: 0; } 
+    
+    .page-break { 
+        margin: 0 !important; 
+        border: none !important; 
+        page-break-before: always !important; 
+        break-before: page !important;
+    }
+    .page-break::after { display: none !important; }
+}

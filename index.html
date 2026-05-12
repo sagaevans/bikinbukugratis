@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>EBOOK LIBRARY - Index</title>
+    
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+    <div class="top-nav no-print">
+        <label>Select Project Slot:</label>
+        <select id="project-slot" onchange="loadSelectedBook()">
+            <option value="">-- Choose a Slot --</option>
+        </select>
+        
+        <button class="nav-btn btn-editor" onclick="window.location.href='admin.html'">Editor Dashboard</button>
+        <button class="nav-btn btn-pdf" id="btn-download" onclick="generateProfessionalPDF()">Preview PDF</button>
+        <button class="nav-btn btn-word">Export to Word</button>
+    </div>
+
+    <div class="main-container">
+        <div id="ebook-area" class="book">
+            <div id="content-render" style="width: 100%; height: 100%; display: flex; flex-direction: column;">
+                <div id="placeholder-text">Please select a project slot from the dropdown menu above.</div>
+            </div>
+        </div>
+    </div>
+
+    <script src="js/home.js"></script>
+</body>
+</html>

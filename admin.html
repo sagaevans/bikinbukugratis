@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Login - Ebook Architect Pro</title>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore-compat.js"></script>
+    <style>
+        * { box-sizing: border-box; margin: 0; padding: 0; font-family: 'Segoe UI', sans-serif; }
+        body { background: #1e272e; display: flex; align-items: center; justify-content: center; height: 100vh; color: #333; }
+        .auth-container { background: #fff; padding: 40px; border-radius: 10px; box-shadow: 0 10px 30px rgba(0,0,0,0.5); width: 100%; max-width: 400px; text-align: center; }
+        h1 { color: #2c3e50; margin-bottom: 10px; font-size: 1.8rem; }
+        p { color: #7f8c8d; margin-bottom: 25px; font-size: 0.9rem; }
+        
+        /* Tombol Google */
+        .btn-google { background: #fff; color: #444; border: 1px solid #ddd; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; display: flex; align-items: center; justify-content: center; gap: 10px; transition: 0.3s; margin-bottom: 20px; box-shadow: 0 2px 4px rgba(0,0,0,0.05); }
+        .btn-google:hover { background: #f8f9fa; box-shadow: 0 4px 8px rgba(0,0,0,0.1); }
+        .btn-google img { width: 20px; }
+
+        .divider { display: flex; align-items: center; text-align: center; color: #aaa; margin-bottom: 20px; }
+        .divider::before, .divider::after { content: ''; flex: 1; border-bottom: 1px solid #eee; }
+        .divider:not(:empty)::before { margin-right: .25em; }
+        .divider:not(:empty)::after { margin-left: .25em; }
+
+        /* Form Email */
+        .input-group { text-align: left; margin-bottom: 15px; }
+        .input-group label { display: block; font-size: 0.8rem; font-weight: bold; color: #34495e; margin-bottom: 5px; }
+        .input-group input { width: 100%; padding: 10px; border: 1px solid #ccc; border-radius: 5px; outline: none; }
+        .input-group input:focus { border-color: #3498db; }
+        
+        .btn-email { background: #3498db; color: #fff; border: none; padding: 12px; width: 100%; border-radius: 5px; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-email:hover { background: #2980b9; }
+        
+        .footer-text { margin-top: 20px; font-size: 0.85rem; color: #7f8c8d; }
+        .footer-text a { color: #3498db; text-decoration: none; font-weight: bold; }
+    </style>
+</head>
+<body>
+
+    <div class="auth-container">
+        <h1 id="form-title">Ebook Architect</h1>
+        <p id="form-subtitle">Masuk ke Dashboard Panel</p>
+
+        <button class="btn-google" onclick="loginWithGoogle()">
+            <img src="https://www.svgrepo.com/show/475656/google-color.svg" alt="Google Logo">
+            Lanjutkan dengan Google
+        </button>
+
+        <div class="divider">ATAU</div>
+
+        <form id="auth-form">
+            <div class="input-group">
+                <label>Email</label>
+                <input type="email" id="email" required placeholder="email@anda.com">
+            </div>
+            <div class="input-group">
+                <label>Password</label>
+                <input type="password" id="password" required placeholder="Min. 6 Karakter">
+            </div>
+            <button type="submit" class="btn-email" id="btn-submit">Login dengan Email</button>
+        </form>
+
+        <div class="footer-text">
+            <span id="toggle-text">Belum punya akun?</span> 
+            <a href="#" onclick="toggleMode()">Daftar di sini</a>
+        </div>
+    </div>
+
+    <script src="js/auth.js"></script>
+</body>
+</html>
