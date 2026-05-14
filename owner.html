@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+    <title>Owner Dashboard</title>
+
+    <!-- FIREBASE -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.1/firebase-firestore.js"></script>
+
+    <style>
+
+        body{
+            margin:0;
+            padding:20px;
+            background:#f3f4f6;
+            font-family:Arial, sans-serif;
+        }
+
+        .login-box{
+            width:350px;
+            margin:80px auto;
+            background:white;
+            padding:30px;
+            border-radius:12px;
+            box-shadow:0 0 15px rgba(0,0,0,0.1);
+        }
+
+        .login-box h1{
+            text-align:center;
+            margin-bottom:20px;
+        }
+
+        .login-box input{
+            width:100%;
+            padding:12px;
+            margin-bottom:15px;
+            border-radius:8px;
+            border:1px solid #ccc;
+            box-sizing:border-box;
+        }
+
+        .login-box button{
+            width:100%;
+            padding:12px;
+            border:none;
+            border-radius:8px;
+            background:#111827;
+            color:white;
+            cursor:pointer;
+        }
+
+        .dashboard{
+            display:none;
+        }
+
+        .topbar{
+            display:flex;
+            justify-content:space-between;
+            align-items:center;
+            margin-bottom:20px;
+        }
+
+        .topbar button{
+            padding:10px 15px;
+            border:none;
+            border-radius:8px;
+            background:#dc2626;
+            color:white;
+            cursor:pointer;
+        }
+
+        .search-box{
+            margin-bottom:20px;
+        }
+
+        .search-box input{
+            width:100%;
+            padding:12px;
+            border-radius:8px;
+            border:1px solid #ccc;
+            box-sizing:border-box;
+        }
+
+        .books-container{
+            display:grid;
+            grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+            gap:20px;
+        }
+
+        .book-card{
+            background:white;
+            padding:20px;
+            border-radius:12px;
+            box-shadow:0 0 10px rgba(0,0,0,0.08);
+        }
+
+        .book-card h3{
+            margin-top:0;
+        }
+
+        .book-card button{
+            padding:10px;
+            border:none;
+            border-radius:8px;
+            cursor:pointer;
+            margin-right:10px;
+            margin-top:10px;
+        }
+
+        .delete-btn{
+            background:#dc2626;
+            color:white;
+        }
+
+    </style>
+</head>
+
+<body>
+
+    <!-- LOGIN -->
+    <div class="login-box" id="loginBox">
+
+        <h1>OWNER ACCESS</h1>
+
+        <input
+            type="text"
+            id="githubUsername"
+            placeholder="GitHub Username"
+        >
+
+        <input
+            type="password"
+            id="githubToken"
+            placeholder="GitHub Token"
+        >
+
+        <button onclick="verifyGithubToken()">
+            LOGIN OWNER
+        </button>
+
+    </div>
+
+
+    <!-- DASHBOARD -->
+    <div class="dashboard" id="dashboard">
+
+        <div class="topbar">
+
+            <h1>OWNER DASHBOARD</h1>
+
+            <button onclick="logoutOwner()">
+                Logout
+            </button>
+
+        </div>
+
+        <div class="search-box">
+
+            <input
+                type="text"
+                id="searchInput"
+                placeholder="Cari ebook..."
+                onkeyup="filterBooks()"
+            >
+
+        </div>
+
+        <div id="booksContainer" class="books-container"></div>
+
+    </div>
+
+
+
+<script>
+
+    // =========================
+    // FIREBASE CONFIG
+    // =========================
+
+    const firebaseConfig = {
+        apiKey: "AIzaSyBIcM2VZPmk8N4xV47cfJzXsIbbR3lJlcQ",
+        authDomain: "ebook-architect-pro.firebaseapp.com",
+        projectId: "ebook-architect-pro",
+        storageBucket: "ebook-architect-pro.firebasestorage.app",
+        messagingSenderId: "1008083358828",
+        appId: "1:1008083358828:web:6988c434d68662c8afb449",
+        measurementId: "G-L3ENZCBFJ0"
+    };
+
+    firebase.initializeApp(firebaseConfig);
+
+    const db = firebase.firestore();
+
+
+
+    // =========================
+    // GLOBAL
+    // =========================
+
+    let allBooks = [];
+
+
+
+    // =========================
+    // AUTO LOGIN
+    // =========================
+
+    window.onload = async function(){
+
+        const token = localStorage.getItem("owner_github_token");
+
+        if(token){
+
+            const valid = await validateToken(token);
+
+            if(valid){
+
+                showDashboard();
+                loadAllBooks();
+
+            }else{
+
+                logoutOwner();
+            }
+        }
+    };
+
+
+
+    // =========================
+    // VERIFY TOKEN
+    // =========================
+
+    async function verifyGithubToken(){
+
+        const username =
+            document.getElementById("githubUsername")
+            .value
+            .trim();
+
+        const token =
+            document.getElementById("githubToken")
+            .value
+            .trim();
+
+        if(!username || !token){
+
+            alert("Lengkapi username dan token!");
+            return;
+        }
+
+        try{
+
+            const response = await fetch(
+                "https://api.github.com/user",
+                {
+                    headers:{
+                        Authorization: `Bearer ${token}`
+                    }
+                }
+            );
+
+            if(!response.ok){
+
+                throw new Error("Token tidak valid");
+            }
+
+            const data = await response.json();
+
+            if(
+                data.login.toLowerCase()
+                !==
+                username.toLowerCase()
+            ){
+
+                alert("Username tidak cocok!");
+                return;
+            }
+
+            localStorage.setItem(
+                "owner_github_token",
+                token
+            );
+
+            localStorage.setItem(
+                "owner_github_username",
+                username
+            );
+
+            showDashboard();
+
+            loadAllBooks();
+
+        }catch(error){
+
+            console.error(error);
+
+            alert(
+                "Login owner gagal: "
+                + error.message
+            );
+        }
+    }
+
+
+
+    // =========================
+    // VALIDATE TOKEN
+    // =========================
+
+    async function validateToken(token){
+
+        try{
+
+            const response = await fetch(
+                "https://api.github.com/user",
+                {
+                    headers:{
+                        Authorization:`Bearer ${token}`
+                    }
+                }
+            );
+
+            return response.ok;
+
+        }catch{
+
+            return false;
+        }
+    }
+
+
+
+    // =========================
+    // SHOW DASHBOARD
+    // =========================
+
+    function showDashboard(){
+
+        document.getElementById("loginBox")
+            .style.display = "none";
+
+        document.getElementById("dashboard")
+            .style.display = "block";
+    }
+
+
+
+    // =========================
+    // LOAD BOOKS
+    // =========================
+
+    async function loadAllBooks(){
+
+        const container =
+            document.getElementById(
+                "booksContainer"
+            );
+
+        container.innerHTML =
+            "<p>Loading ebook...</p>";
+
+        try{
+
+            const snapshot =
+                await db.collection("books").get();
+
+            allBooks = [];
+
+            snapshot.forEach(doc => {
+
+                allBooks.push({
+                    id: doc.id,
+                    ...doc.data()
+                });
+            });
+
+            renderBooks(allBooks);
+
+        }catch(error){
+
+            console.error(error);
+
+            container.innerHTML =
+                "<p>Gagal load ebook</p>";
+        }
+    }
+
+
+
+    // =========================
+    // RENDER
+    // =========================
+
+    function renderBooks(books){
+
+        const container =
+            document.getElementById(
+                "booksContainer"
+            );
+
+        if(books.length === 0){
+
+            container.innerHTML =
+                "<p>Tidak ada ebook.</p>";
+
+            return;
+        }
+
+        container.innerHTML = "";
+
+        books.forEach(book => {
+
+            const title =
+                book.title || "Tanpa Judul";
+
+            const author =
+                book.authorUsername ||
+                book.authorEmail ||
+                "Anonim";
+
+            const card =
+                document.createElement("div");
+
+            card.className = "book-card";
+
+            card.innerHTML = `
+
+                <h3>${title}</h3>
+
+                <p>
+                    <b>Author:</b>
+                    ${author}
+                </p>
+
+                <p>
+                    <b>ID:</b>
+                    ${book.id}
+                </p>
+
+                <button
+                    onclick="previewBook('${book.id}')"
+                >
+                    Preview
+                </button>
+
+                <button
+                    class="delete-btn"
+                    onclick="deleteBook('${book.id}')"
+                >
+                    Delete
+                </button>
+
+            `;
+
+            container.appendChild(card);
+        });
+    }
+
+
+
+    // =========================
+    // SEARCH
+    // =========================
+
+    function filterBooks(){
+
+        const keyword =
+            document.getElementById("searchInput")
+            .value
+            .toLowerCase();
+
+        const filtered = allBooks.filter(book => {
+
+            const title =
+                (book.title || "")
+                .toLowerCase();
+
+            const author =
+                (
+                    book.authorUsername ||
+                    book.authorEmail ||
+                    ""
+                ).toLowerCase();
+
+            return (
+                title.includes(keyword)
+                ||
+                author.includes(keyword)
+            );
+        });
+
+        renderBooks(filtered);
+    }
+
+
+
+    // =========================
+    // PREVIEW
+    // =========================
+
+    function previewBook(id){
+
+        window.open(
+            `index.html?book=${id}`,
+            "_blank"
+        );
+    }
+
+
+
+    // =========================
+    // DELETE
+    // =========================
+
+    async function deleteBook(id){
+
+        const confirmDelete = confirm(
+            "Yakin hapus ebook?"
+        );
+
+        if(!confirmDelete) return;
+
+        try{
+
+            await db
+                .collection("books")
+                .doc(id)
+                .delete();
+
+            alert("Ebook berhasil dihapus");
+
+            loadAllBooks();
+
+        }catch(error){
+
+            console.error(error);
+
+            alert(
+                "Delete gagal. Kemungkinan Firebase Rules masih membatasi."
+            );
+        }
+    }
+
+
+
+    // =========================
+    // LOGOUT
+    // =========================
+
+    function logoutOwner(){
+
+        localStorage.removeItem(
+            "owner_github_token"
+        );
+
+        localStorage.removeItem(
+            "owner_github_username"
+        );
+
+        location.reload();
+    }
+
+</script>
+
+</body>
+</html>
