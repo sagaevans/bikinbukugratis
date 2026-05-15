@@ -42,5 +42,80 @@
 Aplikasi ini mendukung **Username Publik**. Penulis dapat memilih nama tampilan mereka sendiri yang akan muncul di dropdown Perpustakaan, sehingga alamat email tetap terjaga kerahasiaannya.
 
 ---
+# OWNER DASHBOARD (owner.html)
+
+Project ini memiliki halaman khusus developer/pemilik repo bernama:
+
+```plaintext
+owner.html
+
+Halaman ini digunakan untuk:
+
+melihat semua ebook dari seluruh user
+mencari ebook
+preview ebook
+menghapus ebook
+
+Halaman ini TIDAK menggunakan login Firebase.
+
+Owner login menggunakan:
+
+GitHub Username
+GitHub Personal Access Token (PAT)
+Cara Akses
+
+Buka:
+
+owner.html
+Cara Membuat GitHub Token
+Login GitHub
+Buka:
+
+https://github.com/settings/tokens
+
+Pilih:
+Tokens (classic)
+Klik:
+Generate new token (classic)
+Scope minimal:
+read:user
+Generate token
+Copy token
+Login Owner
+
+Masukkan:
+
+GitHub Username
+GitHub Token
+
+Jika valid:
+
+dashboard owner akan terbuka
+semua ebook user dapat diakses
+Keamanan
+
+Karena project ini frontend-only:
+
+token disimpan di browser localStorage
+jangan share token
+jangan upload token ke GitHub
+logout setelah selesai
+Logout
+
+Klik tombol:
+
+Logout
+
+untuk menghapus token dari browser.
+
+Catatan Penting
+
+Fitur delete ebook membutuhkan Firebase Rules yang mengizinkan delete access.
+
+Jika delete gagal:
+
+berarti Firebase Rules masih membatasi operasi delete
+fitur read/preview tetap berjalan normal
+
 
 **Dibuat dengan ❤️ untuk Penulis Indonesia.**
