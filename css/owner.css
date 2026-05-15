@@ -1,0 +1,64 @@
+body{
+    margin:0;
+    padding:20px;
+    background:#f3f4f6;
+    font-family:Arial, sans-serif;
+}
+.stats{
+    margin-bottom:20px;
+}
+
+.card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.08);
+}
+
+.search-box{
+    margin-bottom:20px;
+}
+
+.search-box input{
+    width:100%;
+    padding:12px;
+    border-radius:8px;
+    border:1px solid #ccc;
+    box-sizing:border-box;
+}
+
+.books-container{
+    display:grid;
+    grid-template-columns:repeat(auto-fill, minmax(280px, 1fr));
+    gap:20px;
+}
+
+.book-card{
+    background:white;
+    padding:20px;
+    border-radius:12px;
+    box-shadow:0 0 10px rgba(0,0,0,0.08);
+}
+
+.book-card h3{
+    margin-top:0;
+}
+
+.card-buttons{
+    display:flex;
+    gap:10px;
+    margin-top:15px;
+}
+
+.card-buttons button{
+    flex:1;
+    padding:10px;
+    border:none;
+    border-radius:8px;
+    cursor:pointer;
+}
+
+.delete-btn{
+    background:#dc2626;
+    color:white;
+}
